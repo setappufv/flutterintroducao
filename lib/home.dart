@@ -9,23 +9,24 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-   /// @MembersController membersC
-   /// Função que recebe o controlador de membros e cria uma lista com todos os membros declarados no controlador
-   
+  /// @MembersController membersC
+  /// Função que recebe o controlador de membros e cria uma lista com todos os membros declarados no controlador
+
   _buildList(MembersController membersC) {
     return ListView.builder(
-      itemCount: membersC.member.length, //Tamanho da minha lista de membros (array de membros)
+      itemCount: membersC
+          .member.length, //Tamanho da minha lista de membros (array de membros)
       itemBuilder: (context, index) {
-        return _buildItem(membersC.member[index], membersC); //Retorna um widget (ListTile) de um membro específico passando 
+        return _buildItem(membersC.member[index],
+            membersC); //Retorna um widget (ListTile) de um membro específico passando
         //o índice desse membro no controlador e a classe de controlador.
       },
     );
   }
 
-
-   /// @MembersController members
-   /// @MemberModel model
-   /// Função que representa um item da lista criada em [_buildList(membersC)]
+  /// @MembersController members
+  /// @MemberModel model
+  /// Função que representa um item da lista criada em [_buildList(membersC)]
   _buildItem(MemberModel model, MembersController members) {
     return ListTile(
       title: Text(model.name),
@@ -49,10 +50,18 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Provider Teste'),
+        leading: Consumer<MembersController>( //Contador de favoritos
+          builder: (context, memberController, widget) {
+            return Center(
+                child: Text(
+                    "${memberController.member.where((i) => i.isFavorite).length}"));
+          },
+        ),
       ),
       //Um consumer controla a construção de um widget de acordo com seu provider tendo como parâmetro um contexto,
       //uma classe e um widget no seu construtor
-      body: Consumer<MembersController>(builder: (context, memberController, widget) {
+      body: Consumer<MembersController>(
+          builder: (context, memberController, widget) {
         return _buildList(memberController);
       }),
     );
